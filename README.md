@@ -6,16 +6,14 @@
 
 ---
 
-ycnbc is **not** affiliated, endorsed, or vetted by CNBC, It's
-an open-source tool that uses Yahoo's publicly available APIs, and is
-intended for research and educational purposes.
+ycnbc is **not** affiliated, endorsed, or vetted by CNBC, It's an open source tool that uses Web Scraping and is intended for research and educational purposes.
 </td></tr></table>
 
 ---
 
 **ycnbc** offers a threaded and Pythonic way to news and market data from [CNBC](https://www.cnbc.com).
 
-[Changelog »](https://github.com/asepscareer/ycnbc/blob/main/CHANGELOG.rst)
+[Changelog »](https://github.com/asepscareer/ycnbc/blob/master/CHANGELOG.rst)
 
 ---
 
@@ -24,10 +22,10 @@ intended for research and educational purposes.
 ---
 ### Requirements
 
-Python >=3.5+
-pandas>=0.24.0
-requests>=2.26
-lxml>=4.5.1
+- Python >=3.5+
+- pandas>=0.24.0
+- requests>=2.26
+- lxml>=4.5.1
 
 ---
 ### Installation
