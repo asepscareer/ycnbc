@@ -1,0 +1,32 @@
+language: python
+
+sudo: true
+fast_finish: true
+
+matrix:
+  include:
+    - python: 3.6
+    - python: 3.7
+    - python: 3.8
+    - python: 3.9
+    - python: 3.10
+      dist: xenial
+      sudo: true
+
+install:
+  - pip install Cython
+  - pip install pytest>=4.6
+  - pip install pytest-cov
+  - pip install coveralls
+  - pip install -r requirements.txt
+  - pip install .
+
+script:
+  - pytest --cov=ycnbc/
+
+after_success:
+  - coveralls
+
+branches:
+  only:
+    - main
