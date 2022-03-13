@@ -50,7 +50,9 @@ latest_ = ycnbc.get_latestnews() # return DataFrame
 # get data by categories or urls
 data_ = ycnbc.get_datanews('economy') # return DataFrame
 ```
+
 or,
+
 ```
 categories = [
     'world-economy', 'us-economy', 'federal-reserve', 'central-banks', 'jobs', 'banks', 'investing',
@@ -69,6 +71,7 @@ categories = [
 for i in categories:
     print(ycnbc.get_datanews(i))
 ```
+
 Note -> The category parameter is a URL.
 For example, if you want to retrieve data from the url https://www.cnbc.com/economy/, then you can simply call it `ycnbc.get_datanews('economy')`.
 

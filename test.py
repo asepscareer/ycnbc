@@ -25,7 +25,7 @@ class TestGetData(unittest.TestCase):
 
     def test_getDatanews(self):
         for i in categories:
-            print(i)
+            print(ycnbc.get_datanews(i))
             assert(ycnbc.get_datanews(i).empty is False)
 
 if __name__ == '__main__':
