@@ -42,11 +42,35 @@ $ pip install ycnbc --upgrade --no-cache-dir
 import ycnbc
 
 # get trending news
-trending_ = ycnbc.get_trendingnews()
+trending_ = ycnbc.get_trendingnews() # return DataFrame
 
 # get latest news
-latest_ = ycnbc.get_latestnews()
+latest_ = ycnbc.get_latestnews() # return DataFrame
+
+# get data by categories or urls
+data_ = ycnbc.get_datanews('economy') # return DataFrame
 ```
+or,
+```
+categories = [
+    'world-economy', 'us-economy', 'federal-reserve', 'central-banks', 'jobs', 'banks', 'investing',
+    'hedge-funds', 'deals-and-ipos', 'insurance',
+    'venture-capital', 'coronavirus', 'wall-street',
+    'economy', 'health-and-science', 'media',
+    'climate', 'wealth', 'life',
+    'small-business', 'energy', 'finance',
+    'transportation', 'industrials', 'real-estate',
+    'retail', 'cybersecurity', 'enterprise',
+    'internet', 'media', 'mobile',
+    'white-house', 'china-politics', 'social-media',
+    'policy', 'defense', 'congress',
+    'hospitals', 'life-and-health-insurance'
+    ]
+for i in categories:
+    print(ycnbc.get_datanews(i))
+```
+**note** -> The category parameter is a URL.
+For example, if you want to retrieve data from the url https://www.cnbc.com/economy/, then you can simply call it `ycnbc.get_datanews('economy')`.
 ---
 
 ### Legal Stuff

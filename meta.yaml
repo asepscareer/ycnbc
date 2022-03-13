@@ -1,5 +1,5 @@
 {% set name = "ycnbc" %}
-{% set version = "1.0.0" %}
+{% set version = "1.0.1" %}
 
 package:
   name: "{{ name|lower }}"
@@ -17,14 +17,14 @@ build:
 requirements:
   host:
     - pandas >=0.24.0
-    - requests >=2.21
+    - requests >=2.23.0
     - lxml >=4.5.1
     - pip
     - python
 
   run:
     - pandas >=0.24.0
-    - requests >=2.21
+    - requests >=2.23.0
     - lxml >=4.5.1
     - python
 

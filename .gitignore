@@ -1,2 +1,8 @@
 dist
 env/*
+ycnbc.egg-info/dependency_links.txt
+ycnbc.egg-info/entry_points.txt
+ycnbc.egg-info/PKG-INFO
+ycnbc.egg-info/requires.txt
+ycnbc.egg-info/SOURCES.txt
+ycnbc.egg-info/top_level.txt

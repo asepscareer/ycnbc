@@ -42,7 +42,7 @@ setup(
 
         'Operating System :: OS Independent',
         'Intended Audience :: Developers',
-        'Topic :: Internet :: WWW/HTTP :: Dynamic Content :: News/Diary'
+        'Topic :: Internet :: WWW/HTTP :: Dynamic Content :: News/Diary',
         'Topic :: Office/Business :: Financial',
         'Topic :: Office/Business :: Financial :: Investment',
         'Topic :: Scientific/Engineering :: Interface Engine/Protocol Translator',
@@ -59,7 +59,7 @@ setup(
     platforms=['any'],
     keywords='scrape news, cnbc library, cnbc python, cnbc api',
     packages=find_packages(exclude=['contrib', 'docs', 'tests', 'examples']),
-    install_requires=['pandas>=0.24.0','requests>=2.26','lxml>=4.5.1'],
+    install_requires=['pandas>=0.24.0','requests>=2.23.0','lxml>=4.5.1'],
     entry_points={
         'console_scripts': ['sample=sample:main',],
     },
