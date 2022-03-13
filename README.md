@@ -69,8 +69,9 @@ categories = [
 for i in categories:
     print(ycnbc.get_datanews(i))
 ```
-**note** -> The category parameter is a URL.
+Note -> The category parameter is a URL.
 For example, if you want to retrieve data from the url https://www.cnbc.com/economy/, then you can simply call it `ycnbc.get_datanews('economy')`.
+
 ---
 
 ### Legal Stuff
