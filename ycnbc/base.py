@@ -96,14 +96,20 @@ def get_datanews(category):
         pass
 
     source, title, posttime = [], [], []
-    market_news = tree.xpath("//div[contains(@class, 'Card-titleAndFooter')]")
-    for i in market_news:
-        text = i.xpath(".//div/text()")[0]
-        posttime_ = i.xpath("..//span/text()")
+    news = tree.xpath("//div[contains(@class, 'Card-titleContainer')]")
+    assert len(news)>0, 'Data Not Found'
 
-        posttime.append(' '.join(posttime_))
-        title.append(text)
+    posttime_news = tree.xpath("//span[contains(@class, 'Card-time')]")
+    assert len(posttime_news)>0, 'Data Not Found'
+
+    for i in posttime_news:
+        text = i.xpath(".//text()")
+        posttime.append(' '.join(text))
+    for i in news:
+        text = i.xpath("..//div/text()")
+
         source.append(list(i.iterlinks())[0][2])
+        title.append(' '.join(text))
 
     data = {
         'Headline': title,

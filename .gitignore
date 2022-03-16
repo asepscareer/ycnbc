@@ -1,3 +1,9 @@
+__pycache__/*
+ycnbc/__pycache__/*
+*.pyc
+.coverage
+.vscode/
+build/
 dist
 env/*
 ycnbc.egg-info/dependency_links.txt

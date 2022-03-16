@@ -24,7 +24,7 @@ ycnbc is **not** affiliated, endorsed, or vetted by CNBC, It's an open source to
 
 - Python >=3.5+
 - pandas>=0.24.0
-- requests>=2.26
+- requests>=2.23.0
 - lxml>=4.5.1
 
 ---
@@ -53,27 +53,27 @@ data_ = ycnbc.get_datanews('economy') # return DataFrame
 
 or,
 
-```
+```python
 categories = [
-    'world-economy', 'us-economy', 'federal-reserve', 'central-banks', 'jobs', 'banks', 'investing',
-    'hedge-funds', 'deals-and-ipos', 'insurance',
-    'venture-capital', 'coronavirus', 'wall-street',
+    'world-economy', 'central-banks', 'jobs',
     'economy', 'health-and-science', 'media',
     'climate', 'wealth', 'life',
-    'small-business', 'energy', 'finance',
-    'transportation', 'industrials', 'real-estate',
-    'retail', 'cybersecurity', 'enterprise',
-    'internet', 'media', 'mobile',
-    'white-house', 'china-politics', 'social-media',
-    'policy', 'defense', 'congress',
+    'small-business', 'finance',
+    'transportation', 'real-estate', 'internet',
+    'white-house', 'policy', 'congress',
     'hospitals', 'life-and-health-insurance'
     ]
 for i in categories:
+    print("category =========> {}".format(i))
     print(ycnbc.get_datanews(i))
 ```
 
-Note -> The category parameter is a URL.
-For example, if you want to retrieve data from the url https://www.cnbc.com/economy/, then you can simply call it `ycnbc.get_datanews('economy')`.
+Note ->
+
+1. The category parameter is a URL.
+For example, if you want to retrieve data from the url https://www.cnbc.com/economy/, then you can simply call it `ycnbc.get_datanews('economy')`. This means that there is still a lot of data that you can take apart from the one attached above.
+
+2. URL pages containing news content that have the `PRO` tag still cannot be retrieved using this library.
 
 ---
 
