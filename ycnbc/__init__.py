@@ -20,10 +20,10 @@
 #
 
 from . import version
-from .base import get_datanews, get_latestnews, get_trendingnews
+from .base import News
 
 __version__ = version.version
 __author__ = "Asep Saputra"
 
 
-__all__ = ['get_trendingnews', 'get_latestnews', 'get_datanews']
+__all__ = ['News']

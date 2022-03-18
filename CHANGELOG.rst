@@ -1,6 +1,11 @@
 Change Log
 ===========
 
+1.0.4
+-------
+- Remapping Query Data
+
+-------
 1.0.3
 -------
 - Fixing Query Data

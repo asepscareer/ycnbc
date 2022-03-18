@@ -21,101 +21,123 @@
 
 from __future__ import print_function
 
-from lxml import html as _html
-import requests as _requests
-from .utils import build_df
-from .uri import _HEADERS_, _BASE_URL_
+from .utils import getnews, latest, trending
 
-def get_trendingnews():
-    try:
-        page = _requests.get(_BASE_URL_, headers=_HEADERS_)
-        tree = _html.fromstring(page.content)
-    except Exception:
-        pass
+class News():
 
-    trending_news = tree.xpath("//li[contains(@class, 'TrendingNowItem')]")
-    assert len(trending_news) > 0, 'Data Not Found'
-    title, source = [], []
+    def latest(self):
+        return latest()
 
-    for i in trending_news:
-        text = i.xpath(".//a/text()")
-        link = list(i.iterlinks())[0][2]
+    def trending(self):
+        return trending()
 
-        title.append(' '.join(text))
-        source.append(link)
+    def economy(self):
+        return getnews('economy')
 
-    data = {
-        'Title': title,
-        'Link': source
-    }
-    df = build_df(data)
-    return df
+    def jobs(self):  
+        return getnews('jobs')
 
+    def white_house(self):  
+        return getnews('white-house')
 
-def get_latestnews():
-    try:
-        page = _requests.get(_BASE_URL_, headers=_HEADERS_)
-        tree = _html.fromstring(page.content)
-    except Exception:
-        pass
+    def hospitals(self):  
+        return getnews('hospitals')
 
-    source, title, posttime = [], [], []
+    def transportation(self):  
+        return getnews('transportation')
 
-    links = tree.xpath("//a[contains(@class, 'LatestNews')]")
-    assert len(links) > 0, 'Data Not Found'
+    def jobs(self):  
+        return getnews('jobs')
 
-    latest_news = tree.xpath("//ul[contains(@class, 'LatestNews')]")
-    assert len(latest_news) > 0, 'Data Not Found'
+    def climate(self):  
+        return getnews('climate')
 
-    for i in links:
-        source.append(list(i.iterlinks())[0][2])
-    for i in latest_news:
-        el = i.xpath("li")
-        for rs in el:
-            text = rs.xpath(".//a/text()")
-            posttime_ = rs.xpath(".//span/time/text()")
+    def media(self):  
+        return getnews('media')
 
-            title.append(' '.join(text))
-            posttime.append(' '.join(posttime_))
+    def internet(self):  
+        return getnews('internet')
 
-    data = {
-        'Headline': title,
-        'Post Time': posttime,
-        'Link': source
-    }
-    df = build_df(data)
-    return df
+    def congress(self):  
+        return getnews('congress')
 
+    def policy(self):  
+        return getnews('policy')
 
-def get_datanews(category):
-    try:
-        page = _requests.get(
-            '{}/{}'.format(_BASE_URL_, category), headers=_HEADERS_)
-        tree = _html.fromstring(page.content)
-    except Exception:
-        pass
+    def finance(self):  
+        return getnews('finance')
 
-    source, title, posttime = [], [], []
-    news = tree.xpath("//div[contains(@class, 'Card-titleContainer')]")
-    assert len(news)>0, 'Data Not Found'
+    def life(self):  
+        return getnews('life')
+    
+    def defense(self):  
+        return getnews('defense')
+    
+    def europe_politics(self):  
+        return getnews('europe-politics')
+    
+    def china_politics(self):  
+        return getnews('china-politics')
+    
+    def asia_politics(self):  
+        return getnews('asia-politics')
+    
+    def world_politics(self):  
+        return getnews('world-politics')
+    
+    def equity_opportunity(self):  
+        return getnews('equity-opportunity')
+    
+    def politics(self):  
+        return getnews('politics')
 
-    posttime_news = tree.xpath("//span[contains(@class, 'Card-time')]")
-    assert len(posttime_news)>0, 'Data Not Found'
+    def wealth(self):  
+        return getnews('wealth')   
 
-    for i in posttime_news:
-        text = i.xpath(".//text()")
-        posttime.append(' '.join(text))
-    for i in news:
-        text = i.xpath("..//div/text()")
+    def world_economy(self):  
+        return getnews('world-economy')  
 
-        source.append(list(i.iterlinks())[0][2])
-        title.append(' '.join(text))
+    def central_banks(self):  
+        return getnews('central-banks')  
 
-    data = {
-        'Headline': title,
-        'Post Time': posttime,
-        'Link': source
-    }
+    def real_estate(self):  
+        return getnews('real-estate')   
 
-    df = build_df(data)
-    return df
+    def health_science(self):  
+        return getnews('health-and-science')   
+
+    def small_business(self):  
+        return getnews('small-business')  
+
+    def lifehealth_insurance(self):
+        return getnews('life-and-health-insurance')
+
+    def business(self):
+        return getnews('business')
+        
+    def energy(self):
+        return getnews('energy')
+
+    def industrials(self):
+        return getnews('industrials')
+
+    def retail(self):
+        return getnews('retail')
+    
+    def cybersecurity(self):
+        return getnews('cybersecurity')
+    
+    def mobile(self):
+        return getnews('mobile')
+
+    def mobile(self):
+        return getnews('technology')
+    
+    def cnbc_disruptors(self):
+        return getnews('cnbc-disruptors')
+    
+    def tech_guide(self):
+        return getnews('tech-guide')
+    
+    def social_media(self):
+        return getnews('social-media')

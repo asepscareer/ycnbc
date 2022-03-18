@@ -41,39 +41,23 @@ $ pip install ycnbc --upgrade --no-cache-dir
 ```python
 import ycnbc
 
+data = ycnbc.News()
+
 # get trending news
-trending_ = ycnbc.get_trendingnews() # return DataFrame
+trending_ = data.trending() # return DataFrame
 
 # get latest news
-latest_ = ycnbc.get_latestnews() # return DataFrame
+latest_ = data.latest() # return DataFrame
 
-# get data by categories or urls
-data_ = ycnbc.get_datanews('economy') # return DataFrame
+# get news by category
+economy_ = data.economy() # return DataFrame
+
+# etc.
 ```
 
-or,
+Note:
 
-```python
-categories = [
-    'world-economy', 'central-banks', 'jobs',
-    'economy', 'health-and-science', 'media',
-    'climate', 'wealth', 'life',
-    'small-business', 'finance',
-    'transportation', 'real-estate', 'internet',
-    'white-house', 'policy', 'congress',
-    'hospitals', 'life-and-health-insurance'
-    ]
-for i in categories:
-    print("category =========> {}".format(i))
-    print(ycnbc.get_datanews(i))
-```
-
-Note ->
-
-1. The category parameter is a URL.
-For example, if you want to retrieve data from the url https://www.cnbc.com/economy/, then you can simply call it `ycnbc.get_datanews('economy')`. This means that there is still a lot of data that you can take apart from the one attached above.
-
-2. URL pages containing news content that have the `PRO` tag still cannot be retrieved using this library.
+- URL pages containing news content that have the `PRO` tag still cannot be retrieved using this library.
 
 ---
 
