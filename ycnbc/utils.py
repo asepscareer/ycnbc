@@ -18,107 +18,147 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-from .uri import _BASE_URL_, _HEADERS_
-from requests import get
+from __future__ import print_function
 from lxml import html
-from pandas import DataFrame
-
-def trending():
-    try:
-        page = get(_BASE_URL_, headers=_HEADERS_)
-        tree = html.fromstring(page.content)
-    except Exception:
-        pass
-
-    trending_news = tree.xpath("//li[contains(@class, 'TrendingNowItem')]")
-    assert len(trending_news) > 0, 'Data Not Found'
-    title, source = [], []
-
-    for i in trending_news:
-        text = i.xpath(".//a/text()")
-        link = list(i.iterlinks())[0][2]
-
-        title.append(' '.join(text))
-        source.append(link)
-
-    data = {
-        'Title': title,
-        'Link': source
-    }
-    df = build_df(data)
-    return df
+from requests import get
+from .uri import _BASE_URL_, _HEADERS_
 
 
-def latest():
-    try:
-        page = get(_BASE_URL_, headers=_HEADERS_)
-        tree = html.fromstring(page.content)
-    except Exception:
-        pass
+class CNBCNews:
+    def __init__(self):
+        self.base_url = _BASE_URL_
+        self.headers = _HEADERS_
 
-    source, title, posttime = [], [], []
+    def _fetch_page(self, endpoint=""):
+        """
+        Fetches and parses the web page content.
 
-    links = tree.xpath("//a[contains(@class, 'LatestNews')]")
-    assert len(links) > 0, 'Data Not Found'
+        Args:
+            endpoint (str): The specific endpoint to fetch data from.
 
-    latest_news = tree.xpath("//ul[contains(@class, 'LatestNews')]")
-    assert len(latest_news) > 0, 'Data Not Found'
+        Returns:
+            html.Element: Parsed HTML tree if successful, otherwise an error dictionary.
+        """
+        try:
+            url = f"{self.base_url}/{endpoint}" if endpoint else self.base_url
+            page = get(url, headers=self.headers)
+            page.raise_for_status()  # Ensure we raise an error for bad HTTP responses
+            return html.fromstring(page.content)
+        except Exception as e:
+            return {"error": str(e)}
 
-    for i in links:
-        source.append(list(i.iterlinks())[0][2])
-    for i in latest_news:
-        el = i.xpath("li")
-        for rs in el:
-            text = rs.xpath(".//a/text()")
-            posttime_ = rs.xpath(".//span/time/text()")
+    def trending(self):
+        """
+        Fetches trending news.
 
-            title.append(' '.join(text))
-            posttime.append(' '.join(posttime_))
+        Returns:
+            dict: Dictionary containing titles and links of trending news, or an error message.
+        """
+        try:
+            tree = self._fetch_page()
+            if "error" in tree:
+                return tree
 
-    data = {
-        'Headline': title,
-        'Post Time': posttime,
-        'Link': source
-    }
-    df = build_df(data)
-    return df
+            trending_news = tree.xpath("//li[contains(@class, 'TrendingNowItem')]")
+            if not trending_news:
+                return {"error": "Data Not Found"}
 
-def getnews(category):
-    try:
-        page = get("{}/{}".format(_BASE_URL_, category), headers=_HEADERS_)
-        tree = html.fromstring(page.content)
+            title, source = [], []
+            for i in trending_news:
+                text = i.xpath(".//a/text()")
+                link = list(i.iterlinks())[0][2] if list(i.iterlinks()) else None
+                title.append(' '.join(text))
+                source.append(link)
 
-        source, title, posttime = [], [], []
-        news = tree.xpath("//div[contains(@class, 'Card-titleContainer')]")
-        assert len(news)>0, 'Data Not Found'
-
-        posttime_news = tree.xpath("//span[contains(@class, 'Card-time')]")
-        assert len(posttime_news)>0, 'Data Not Found'
-
-        for i in posttime_news:
-            text = i.xpath(".//text()")
-            posttime.append(' '.join(text))
-        for i in news:
-            text = i.xpath("..//div/text()")
-
-            source.append(list(i.iterlinks())[0][2])
-            title.append(' '.join(text))
-
-        data = {
-            'Headline': title,
-            'Post Time': posttime,
-            'Link': source
+            return {
+                'Title': title,
+                'Link': source
             }
+        except Exception as e:
+            return {"error": str(e)}
 
-        return build_df(data)
-    except:
-        msg = {
-            'data': [None],
-            'msg': ['This page or category contains news with PRO tags.']
+    def latest(self):
+        """
+        Fetches the latest news.
+
+        Returns:
+            dict: Dictionary containing headlines, post times, and links of the latest news, or an error message.
+        """
+        try:
+            tree = self._fetch_page()
+            if "error" in tree:
+                return tree
+
+            source, title, posttime = [], [], []
+
+            links = tree.xpath("//a[contains(@class, 'LatestNews')]")
+            if not links:
+                return {"error": "No Latest News links found"}
+
+            latest_news = tree.xpath("//ul[contains(@class, 'LatestNews')]")
+            if not latest_news:
+                return {"error": "No Latest News list found"}
+
+            for i in links:
+                link = list(i.iterlinks())[0][2] if list(i.iterlinks()) else None
+                source.append(link)
+
+            for i in latest_news:
+                el = i.xpath("li")
+                for rs in el:
+                    text = rs.xpath(".//a/text()")
+                    posttime_ = rs.xpath(".//span/time/text()")
+
+                    title.append(' '.join(text))
+                    posttime.append(' '.join(posttime_))
+
+            return {
+                'Headline': title,
+                'Post Time': posttime,
+                'Link': source
             }
-        return build_df(msg)
+        except Exception as e:
+            return {"error": str(e)}
 
-def build_df(values):
-    df = DataFrame(data=values)
-    df = df.convert_dtypes()
-    return df
+    def by_category(self, category):
+        """
+        Fetches news based on the category.
+
+        Args:
+            category (str): The news category to fetch.
+
+        Returns: dict: Dictionary containing headlines, post times, and links for the specified category, or an error
+        message.
+        """
+        try:
+            tree = self._fetch_page(category)
+            if "error" in tree:
+                return tree
+
+            source, title, posttime = [], [], []
+
+            news = tree.xpath("//div[contains(@class, 'Card-titleContainer')]")
+            if not news:
+                return {"error": "No news items found"}
+
+            posttime_news = tree.xpath("//span[contains(@class, 'Card-time')]")
+            if not posttime_news:
+                return {"error": "No post time found"}
+
+            for i in posttime_news:
+                text = i.xpath(".//text()")
+                posttime.append(' '.join(text))
+
+            for i in news:
+                text = i.xpath("..//div/text()")
+                link = list(i.iterlinks())[0][2] if list(i.iterlinks()) else None
+                source.append(link)
+                title.append(' '.join(text))
+
+            return {
+                'Headline': title,
+                'Post Time': posttime,
+                'Link': source
+            }
+        except Exception as e:
+            return {"error": str(e)}

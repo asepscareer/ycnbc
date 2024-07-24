@@ -19,125 +19,123 @@
 # limitations under the License.
 #
 
-from __future__ import print_function
+from .utils import CNBCNews
 
-from .utils import getnews, latest, trending
 
-class News():
+class News:
+    def __init__(self):
+        self.news = CNBCNews()
 
     def latest(self):
-        return latest()
+        return self.news.latest()
 
     def trending(self):
-        return trending()
+        return self.news.trending()
 
     def economy(self):
-        return getnews('economy')
+        return self.news.by_category('economy')
 
-    def jobs(self):  
-        return getnews('jobs')
+    def jobs(self):
+        return self.news.by_category('jobs')
 
-    def white_house(self):  
-        return getnews('white-house')
+    def white_house(self):
+        return self.news.by_category('white-house')
 
-    def hospitals(self):  
-        return getnews('hospitals')
+    def hospitals(self):
+        return self.news.by_category('hospitals')
 
-    def transportation(self):  
-        return getnews('transportation')
+    def transportation(self):
+        return self.news.by_category('transportation')
 
-    def jobs(self):  
-        return getnews('jobs')
+    def media(self):
+        return self.news.by_category('media')
 
-    def climate(self):  
-        return getnews('climate')
+    def internet(self):
+        return self.news.by_category('internet')
 
-    def media(self):  
-        return getnews('media')
+    def congress(self):
+        return self.news.by_category('congress')
 
-    def internet(self):  
-        return getnews('internet')
+    def policy(self):
+        return self.news.by_category('policy')
 
-    def congress(self):  
-        return getnews('congress')
+    def finance(self):
+        return self.news.by_category('finance')
 
-    def policy(self):  
-        return getnews('policy')
+    def life(self):
+        return self.news.by_category('life')
 
-    def finance(self):  
-        return getnews('finance')
+    def defense(self):
+        return self.news.by_category('defense')
 
-    def life(self):  
-        return getnews('life')
-    
-    def defense(self):  
-        return getnews('defense')
-    
-    def europe_politics(self):  
-        return getnews('europe-politics')
-    
-    def china_politics(self):  
-        return getnews('china-politics')
-    
-    def asia_politics(self):  
-        return getnews('asia-politics')
-    
-    def world_politics(self):  
-        return getnews('world-politics')
-    
-    def equity_opportunity(self):  
-        return getnews('equity-opportunity')
-    
-    def politics(self):  
-        return getnews('politics')
+    def europe_politics(self):
+        return self.news.by_category('europe-politics')
 
-    def wealth(self):  
-        return getnews('wealth')   
+    def china_politics(self):
+        return self.news.by_category('china-politics')
 
-    def world_economy(self):  
-        return getnews('world-economy')  
+    def asia_politics(self):
+        return self.news.by_category('asia-politics')
 
-    def central_banks(self):  
-        return getnews('central-banks')  
+    def world_politics(self):
+        return self.news.by_category('world-politics')
 
-    def real_estate(self):  
-        return getnews('real-estate')   
+    def equity_opportunity(self):
+        return self.news.by_category('equity-opportunity')
 
-    def health_science(self):  
-        return getnews('health-and-science')   
+    def politics(self):
+        return self.news.by_category('politics')
 
-    def small_business(self):  
-        return getnews('small-business')  
+    def wealth(self):
+        return self.news.by_category('wealth')
+
+    def world_economy(self):
+        return self.news.by_category('world-economy')
+
+    def central_banks(self):
+        return self.news.by_category('central-banks')
+
+    def real_estate(self):
+        return self.news.by_category('real-estate')
+
+    def health_science(self):
+        return self.news.by_category('health-and-science')
+
+    def small_business(self):
+        return self.news.by_category('small-business')
 
     def lifehealth_insurance(self):
-        return getnews('life-and-health-insurance')
+        return self.news.by_category('life-and-health-insurance')
 
     def business(self):
-        return getnews('business')
-        
+        return self.news.by_category('business')
+
     def energy(self):
-        return getnews('energy')
+        return self.news.by_category('energy')
 
     def industrials(self):
-        return getnews('industrials')
+        return self.news.by_category('industrials')
 
     def retail(self):
-        return getnews('retail')
-    
+        return self.news.by_category('retail')
+
     def cybersecurity(self):
-        return getnews('cybersecurity')
-    
-    def mobile(self):
-        return getnews('mobile')
+        return self.news.by_category('cybersecurity')
 
     def mobile(self):
-        return getnews('technology')
-    
+        return self.news.by_category('mobile')
+
+    def technology(self):
+        return self.news.by_category('technology')
+
     def cnbc_disruptors(self):
-        return getnews('cnbc-disruptors')
-    
+        return self.news.by_category('cnbc-disruptors')
+
     def tech_guide(self):
-        return getnews('tech-guide')
-    
+        return self.news.by_category('tech-guide')
+
     def social_media(self):
-        return getnews('social-media')
+        return self.news.by_category('social-media')
+
+    def climate(self):
+        return self.news.by_category('climate')

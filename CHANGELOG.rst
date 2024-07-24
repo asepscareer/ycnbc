@@ -1,6 +1,10 @@
 Change Log
 ===========
 
+1.0.5
+-------
+- Excluded pandas dependency to streamline the library and reduce external dependencies.
+
 1.0.4
 -------
 - Remapping Query Data
