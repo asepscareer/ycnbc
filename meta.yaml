@@ -1,5 +1,5 @@
 {% set name = "ycnbc" %}
-{% set version = "1.0.4" %}
+{% set version = "1.0.6" %}
 
 package:
   name: "{{ name|lower }}"
@@ -7,7 +7,7 @@ package:
 
 source:
   url: "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz"
-  sha256: "207da19e87792bf742d2744eee2fe18169853c1b82cfe14a9a7cfb8d05f09137"
+  sha256: "901BC86660D303E1C6533D96FA41687E623DD7682429C2225747E5CEFBDFB120"
 
 build:
   noarch: python
@@ -16,14 +16,12 @@ build:
 
 requirements:
   host:
-    - pandas >=0.24.0
     - requests >=2.23.0
     - lxml >=4.5.1
     - pip
     - python
 
   run:
-    - pandas >=0.24.0
     - requests >=2.23.0
     - lxml >=4.5.1
     - python
@@ -34,15 +32,14 @@ test:
 
 about:
   home: "https://github.com/asepscareer/ycnbc"
-  license: "Apache Software"
+  license: "Apache Software License"
   license_family: "APACHE"
   license_file: ""
   summary: "CNBC data downloader"
-  description:
+  description: "A Python package for downloading CNBC data."
   doc_url: "https://github.com/asepscareer/ycnbc"
   dev_url: "https://pypi.python.org/pypi/ycnbc"
-  doc_source_url: https://github.com/asepscareer/ycnbc/blob/master/README.md
-
+  doc_source_url: "https://github.com/asepscareer/ycnbc/blob/master/README.md"
 
 extra:
   recipe-maintainers:

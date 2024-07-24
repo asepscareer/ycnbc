@@ -1,6 +1,11 @@
 Change Log
 ===========
 
+1.0.6
+-------
+- Remove pandas from meta.yaml
+
+
 1.0.5
 -------
 - Excluded pandas dependency to streamline the library and reduce external dependencies.
