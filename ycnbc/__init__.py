@@ -20,10 +20,11 @@
 #
 
 from . import version
-from .base import News
+from .news import News
+from .markets import Markets
 
 __version__ = version.version
 __author__ = "Asep Saputra"
 
 
-__all__ = ['News']
+__all__ = [News, Markets]

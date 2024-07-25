@@ -1,6 +1,10 @@
 Change Log
 ===========
 
+1.0.7
+-------
+- Add markets data to ycnbc
+
 1.0.6
 -------
 - Remove pandas from meta.yaml

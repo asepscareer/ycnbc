@@ -1,30 +1,11 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-#
-# ycnbc - CNBC data downloader
-# https://github.com/asepscareer/ycnbc
-#
-# Copyright 2022 Asep Saputra
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 from __future__ import print_function
 from lxml import html
 from requests import get
-from .uri import _BASE_URL_, _HEADERS_
+
+from .uri import _HEADERS_, _BASE_URL_
 
 
-class CNBCNews:
+class CNBCNewsUtils:
     def __init__(self):
         self.base_url = _BASE_URL_
         self.headers = _HEADERS_
@@ -42,7 +23,7 @@ class CNBCNews:
         try:
             url = f"{self.base_url}/{endpoint}" if endpoint else self.base_url
             page = get(url, headers=self.headers)
-            page.raise_for_status()  # Ensure we raise an error for bad HTTP responses
+            page.raise_for_status()
             return html.fromstring(page.content)
         except Exception as e:
             return {"error": str(e)}
@@ -71,8 +52,8 @@ class CNBCNews:
                 source.append(link)
 
             return {
-                'Title': title,
-                'Link': source
+                'title': title,
+                'link': source
             }
         except Exception as e:
             return {"error": str(e)}
@@ -113,9 +94,9 @@ class CNBCNews:
                     posttime.append(' '.join(posttime_))
 
             return {
-                'Headline': title,
-                'Post Time': posttime,
-                'Link': source
+                'headline': title,
+                'time': posttime,
+                'link': source
             }
         except Exception as e:
             return {"error": str(e)}
@@ -156,9 +137,9 @@ class CNBCNews:
                 title.append(' '.join(text))
 
             return {
-                'Headline': title,
-                'Post Time': posttime,
-                'Link': source
+                'headline': title,
+                'time': posttime,
+                'link': source
             }
         except Exception as e:
             return {"error": str(e)}

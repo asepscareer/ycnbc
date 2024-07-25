@@ -1,5 +1,5 @@
 {% set name = "ycnbc" %}
-{% set version = "1.0.6" %}
+{% set version = "1.0.7" %}
 
 package:
   name: "{{ name|lower }}"
@@ -7,7 +7,7 @@ package:
 
 source:
   url: "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz"
-  sha256: "901BC86660D303E1C6533D96FA41687E623DD7682429C2225747E5CEFBDFB120"
+  sha256: "670D54B9688CC95B4776CF887CFA2E723D642A7A174B86F33B0D629868A1A39C"
 
 build:
   noarch: python
