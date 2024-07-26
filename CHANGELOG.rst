@@ -1,6 +1,10 @@
 Change Log
 ===========
 
+1.0.8
+-------
+- Solve empty headlines
+
 1.0.7
 -------
 - Add markets data to ycnbc

@@ -52,7 +52,7 @@ class CNBCNewsUtils:
                 source.append(link)
 
             return {
-                'title': title,
+                'headline': title,
                 'link': source
             }
         except Exception as e:
@@ -116,30 +116,19 @@ class CNBCNewsUtils:
             if "error" in tree:
                 return tree
 
-            source, title, posttime = [], [], []
-
-            news = tree.xpath("//div[contains(@class, 'Card-titleContainer')]")
-            if not news:
-                return {"error": "No news items found"}
-
-            posttime_news = tree.xpath("//span[contains(@class, 'Card-time')]")
-            if not posttime_news:
-                return {"error": "No post time found"}
-
-            for i in posttime_news:
-                text = i.xpath(".//text()")
-                posttime.append(' '.join(text))
-
-            for i in news:
-                text = i.xpath("..//div/text()")
-                link = list(i.iterlinks())[0][2] if list(i.iterlinks()) else None
-                source.append(link)
-                title.append(' '.join(text))
+            headlines, post_times, links = [], [], []
+            news_elements = tree.cssselect('.Card-titleContainer a.Card-title')
+            post_time_elements = tree.cssselect('span.Card-time')
+            for news, post_time in zip(news_elements, post_time_elements):
+                headlines.append(news.text.strip())
+                links.append(news.get('href'))
+                post_times.append(post_time.text.strip())
 
             return {
-                'headline': title,
-                'time': posttime,
-                'link': source
+                'headline': headlines,
+                'time': post_times,
+                'link': links,
             }
+
         except Exception as e:
             return {"error": str(e)}

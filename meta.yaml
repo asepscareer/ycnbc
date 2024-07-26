@@ -1,5 +1,5 @@
 {% set name = "ycnbc" %}
-{% set version = "1.0.7" %}
+{% set version = "1.0.8" %}
 
 package:
   name: "{{ name|lower }}"
@@ -7,7 +7,7 @@ package:
 
 source:
   url: "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz"
-  sha256: "670D54B9688CC95B4776CF887CFA2E723D642A7A174B86F33B0D629868A1A39C"
+  sha256: "B66FD76CB7706458976358192FAEDA527CEEA264E81CF6EE648C8328B056B165"
 
 build:
   noarch: python
@@ -18,12 +18,14 @@ requirements:
   host:
     - requests >=2.23.0
     - lxml >=4.5.1
+    - cssselect >=1.2.0
     - pip
     - python
 
   run:
     - requests >=2.23.0
     - lxml >=4.5.1
+    - cssselect >=1.2.0
     - python
 
 test:

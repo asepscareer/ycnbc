@@ -51,7 +51,7 @@ setup(
     platforms=['any'],
     keywords='scrape news, cnbc library, cnbc python, cnbc api',
     packages=find_packages(exclude=['contrib', 'docs', 'tests', 'examples']),
-    install_requires=['requests>=2.23.0', 'lxml>=4.5.1'],
+    install_requires=['requests>=2.23.0', 'lxml>=4.5.1', 'cssselect>=1.2.0'],
     entry_points={
         'console_scripts': [
             # 'sample=sample:main',

@@ -55,6 +55,7 @@ class TestData(unittest.TestCase):
             with self.subTest(method=method_name):
                 method = getattr(self.news, method_name)
                 response = method()
+                print(json.dumps(response))
                 self.assertNotIn("error", response, f"{method_name} returned an error")
 
     def test_cnbc_markets(self):
