@@ -49,7 +49,7 @@ class CNBCNewsUtils:
             for i in trending_news:
                 text = i.xpath(".//a/text()")
                 link = list(i.iterlinks())[0][2] if list(i.iterlinks()) else None
-                title.append(' '.join(text))
+                title.append(' '.join(text).encode('ascii', 'ignore').decode('ascii'))
                 source.append(link)
 
             return {
@@ -91,7 +91,7 @@ class CNBCNewsUtils:
                     text = rs.xpath(".//a/text()")
                     posttime_ = rs.xpath(".//span/time/text()")
 
-                    title.append(' '.join(text))
+                    title.append(' '.join(text).encode('ascii', 'ignore').decode('ascii'))
                     posttime.append(' '.join(posttime_))
 
             return {
@@ -121,7 +121,7 @@ class CNBCNewsUtils:
             news_elements = tree.cssselect('.Card-titleContainer a.Card-title')
             post_time_elements = tree.cssselect('span.Card-time')
             for news, post_time in zip(news_elements, post_time_elements):
-                headlines.append(news.text.strip())
+                headlines.append(news.text.strip().encode('ascii', 'ignore').decode('ascii'))
                 links.append(news.get('href'))
                 post_times.append(post_time.text.strip())
 
