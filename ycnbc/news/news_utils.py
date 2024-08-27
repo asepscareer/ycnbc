@@ -1,14 +1,15 @@
 from __future__ import print_function
 from lxml import html
-from requests import get
+import requests
 
-from .uri import _HEADERS_, _BASE_URL_
+from ..uri import _HEADERS_, _BASE_URL_
 
 
 class CNBCNewsUtils:
     def __init__(self):
         self.base_url = _BASE_URL_
         self.headers = _HEADERS_
+        self.request = requests.session()
 
     def _fetch_page(self, endpoint=""):
         """
@@ -22,7 +23,7 @@ class CNBCNewsUtils:
         """
         try:
             url = f"{self.base_url}/{endpoint}" if endpoint else self.base_url
-            page = get(url, headers=self.headers)
+            page = self.request.get(url, headers=self.headers)
             page.raise_for_status()
             return html.fromstring(page.content)
         except Exception as e:

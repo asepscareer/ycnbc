@@ -4,6 +4,7 @@ import requests
 class MarketUtils:
     def __init__(self):
         self.base_url = "https://quote.cnbc.com/quote-html-webservice/restQuote/symbolType/symbol"
+        self.request = requests.session()
 
     def fetch_data(self, symbols):
         params = {
@@ -18,7 +19,7 @@ class MarketUtils:
         }
 
         try:
-            response = requests.get(self.base_url, params=params)
+            response = self.request.get(self.base_url, params=params)
             if response.status_code == 200:
                 data = response.json()
                 formatted_quote = data.get('FormattedQuoteResult', {}).get('FormattedQuote', [])
