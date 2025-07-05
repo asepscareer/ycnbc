@@ -3,4 +3,4 @@ lxml>=4.9.3
 cssselect>=1.2.0
 pytest>=7.0.0
 flake8
-mypy
+
