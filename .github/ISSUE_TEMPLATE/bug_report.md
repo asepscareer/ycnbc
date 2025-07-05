@@ -1,17 +1,32 @@
 ---
-name: Bug report
-about: Create a report to help us improve
-title: ''
-labels: ''
-assignees: ''
+name: Bug Report
+about: Report a bug to help us improve
+title: "[Bug]: "
+labels: "bug"
+assignees: ""
 
 ---
 
-*** READ BEFORE POSTING ***
+**Describe the bug**
+A clear and concise description of what the bug is.
 
-Before posting an issue - please upgrade to the latest version and confirm the issue/bug is still there.
+**To Reproduce**
+Steps to reproduce the behavior:
+1. Go to '...'
+2. Click on '....'
+3. Scroll down to '....'
+4. See error
 
-Upgrade using:
-`$ pip install ycnbc --upgrade --no-cache-dir`
+**Expected behavior**
+A clear and concise description of what you expected to happen.
 
-Bug still there? Delete this content and submit your bug report here...
+**Screenshots**
+If applicable, add screenshots to help explain your problem.
+
+**Desktop (please complete the following information):**
+- OS: [e.g. iOS, Windows, Linux]
+- Python Version: [e.g. 3.8.5]
+- ycnbc Version: [e.g. 0.1.0]
+
+**Additional context**
+Add any other context about the problem here.
