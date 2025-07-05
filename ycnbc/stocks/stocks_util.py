@@ -1,13 +1,13 @@
-import requests
+from curl_cffi import requests
 from lxml import html
-from ..uri import _HEADERS_, _BASE_URL_
+from ycnbc.news.uri import _HEADERS_, _BASE_URL_
 
 
 class StocksUtil:
     def __init__(self):
         self.base_url = _BASE_URL_
         self.headers = _HEADERS_
-        self.request = requests.session()
+        self.request = requests.Session()
 
     def _fetch_page(self, endpoint=""):
         """
@@ -21,14 +21,17 @@ class StocksUtil:
         """
         try:
             url = f"{self.base_url}/quotes/{endpoint}" if endpoint else self.base_url
-            page = self.request.get(url, headers=self.headers)
+            page = self.request.get(
+                url, headers=self.headers, impersonate="chrome110")
             page.raise_for_status()
             return html.fromstring(page.content)
-        except Exception as e:
+        except requests.errors.RequestsError as e:
             return {"error": str(e)}
 
     def summary(self, symbol):
         tree = self._fetch_page(symbol)
+        if isinstance(tree, dict) and 'error' in tree:
+            return tree
         data = {}
 
         for li in tree.xpath("//li[contains(@class, 'Summary-stat')]"):
@@ -39,12 +42,16 @@ class StocksUtil:
 
     def news(self, symbol: str):
         tree = self._fetch_page(f"{symbol}?tab=news")
+        if isinstance(tree, dict) and 'error' in tree:
+            return tree
         data = []
 
         for item in tree.xpath("//li[contains(@class, 'LatestNews-item')]"):
-            headline = item.xpath(".//a[@class='LatestNews-headline']/text()")[0]
+            headline = item.xpath(
+                ".//a[@class='LatestNews-headline']/text()")[0]
             link = item.xpath(".//a[@class='LatestNews-headline']/@href")[0]
-            posttime = item.xpath(".//time[@class='LatestNews-timestamp']/text()")[0]
+            posttime = item.xpath(
+                ".//time[@class='LatestNews-timestamp']/text()")[0]
 
             data.append({
                 "headline": headline,
@@ -55,9 +62,12 @@ class StocksUtil:
 
     def profile(self, symbol):
         tree = self._fetch_page(f"{symbol}?tab=profile")
+        if isinstance(tree, dict) and 'error' in tree:
+            return tree
         company_details = {}
 
-        symbol_and_exchange = tree.xpath("//span[@class='QuoteStrip-symbolAndExchange']/text()")
+        symbol_and_exchange = tree.xpath(
+            "//span[@class='QuoteStrip-symbolAndExchange']/text()")
         company_details.update(
             {
                 'name': tree.xpath("//span[@class='QuoteStrip-name']/text()")[0].strip(),

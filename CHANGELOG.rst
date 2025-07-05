@@ -1,6 +1,11 @@
 Change Log
 ===========
 
+1.0.9
+-------
+- Change `requests` to `curl-cffi`
+- Added GitHub Actions workflow for PyPI auto-publish.
+
 1.0.8
 -------
 - Solve empty headlines

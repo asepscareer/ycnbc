@@ -2,7 +2,7 @@
 
 <table border=1 cellpadding=10><tr><td>
 
-#### \*\*\* IMPORTANT LEGAL DISCLAIMER \*\*\*
+#### *** IMPORTANT LEGAL DISCLAIMER ***
 
 ---
 
@@ -17,13 +17,22 @@ ycnbc is **not** affiliated, endorsed, or vetted by CNBC, It's an open source to
 
 ---
 
+## Why ycnbc is compelling:
+
+- **Simplicity**: Easy-to-use API for quick data retrieval.
+- **Directness**: No retries, ensuring immediate feedback on success or failure.
+- **Focus**: Specifically designed for CNBC data, providing relevant and targeted information.
+- **Lightweight**: Minimal dependencies for a streamlined experience.
+
+---
+
 ## Quick Start
 
 ---
 ### Requirements
 
-- Python >=3.5+
-- requests>=2.23.0
+- Python >=3.8+
+- curl-cffi>=0.5.9
 - lxml>=4.5.1
 
 ---

@@ -1,17 +1,22 @@
-from __future__ import print_function
+import logging
+from typing import List, Dict, Optional
 from lxml import html
-import requests
+from curl_cffi import requests
+ 
 
-from ..uri import _HEADERS_, _BASE_URL_
+from .uri import _HEADERS_, _BASE_URL_
+from ..exceptions import DataNotFoundError, ParsingError
+
+logger = logging.getLogger(__name__)
 
 
 class CNBCNewsUtils:
-    def __init__(self):
-        self.base_url = _BASE_URL_
-        self.headers = _HEADERS_
-        self.request = requests.session()
+    def __init__(self) -> None:
+        self.base_url: str = _BASE_URL_
+        self.headers: Dict[str, str] = _HEADERS_
+        self.request: requests.Session = requests.Session()
 
-    def _fetch_page(self, endpoint=""):
+    def _fetch_page(self, endpoint: str = "") -> html.HtmlElement:
         """
         Fetches and parses the web page content.
 
@@ -19,117 +24,132 @@ class CNBCNewsUtils:
             endpoint (str): The specific endpoint to fetch data from.
 
         Returns:
-            html.Element: Parsed HTML tree if successful, otherwise an error dictionary.
+            html.Element: Parsed HTML tree.
+        Raises:
+            YCNBCError: If there's an issue fetching the page.
         """
-        try:
-            url = f"{self.base_url}/{endpoint}" if endpoint else self.base_url
-            page = self.request.get(url, headers=self.headers)
-            page.raise_for_status()
-            return html.fromstring(page.content)
-        except Exception as e:
-            return {"error": str(e)}
+        url: str = f"{self.base_url}/{endpoint}" if endpoint else self.base_url
+        logger.info(f"Fetching URL: {url}")
+        page: requests.Response = self.request.get(
+            url, headers=self.headers, impersonate="chrome110", timeout=30)
+        page.raise_for_status()
+        return html.fromstring(page.content)
 
-    def trending(self):
+    def trending(self) -> Dict[str, List[Optional[str]]]:
         """
         Fetches trending news.
 
         Returns:
-            dict: Dictionary containing titles and links of trending news, or an error message.
+            dict: Dictionary containing titles and links of trending news.
+        Raises:
+            DataNotFoundError: If trending news data is not found.
+            ParsingError: If there's an issue parsing the data.
         """
         try:
-            tree = self._fetch_page()
-            if "error" in tree:
-                return tree
+            tree: html.HtmlElement = self._fetch_page()
 
-            trending_news = tree.xpath("//li[contains(@class, 'TrendingNowItem')]")
+            trending_news: List[html.HtmlElement] = tree.xpath(
+                "//li[contains(@class, 'TrendingNowItem')]")
             if not trending_news:
-                return {"error": "Data Not Found"}
+                logger.warning("Trending news data not found.")
+                return []
 
-            title, source = [], []
+            parsed_news: List[Dict[str, Optional[str]]] = []
             for i in trending_news:
-                text = i.xpath(".//a/text()")
-                link = list(i.iterlinks())[0][2] if list(i.iterlinks()) else None
-                title.append(' '.join(text).encode('ascii', 'ignore').decode('ascii'))
-                source.append(link)
+                text: List[str] = i.xpath(".//a/text()")
+                link: Optional[str] = list(i.iterlinks())[
+                    0][2] if list(i.iterlinks()) else None
+                headline = ' '.join(text).encode('ascii', 'ignore').decode('ascii')
+                parsed_news.append({'headline': headline, 'link': link})
 
-            return {
-                'headline': title,
-                'link': source
-            }
+            return parsed_news
         except Exception as e:
-            return {"error": str(e)}
+            logger.error(f"Error parsing trending news: {e}")
+            raise ParsingError(f"Error parsing trending news: {e}") from e
 
-    def latest(self):
+    def latest(self) -> List[Dict[str, Optional[str]]]:
         """
         Fetches the latest news.
 
         Returns:
-            dict: Dictionary containing headlines, post times, and links of the latest news, or an error message.
+            list: List of dictionaries containing headlines, post times, and links of the latest news.
+        Raises:
+            ParsingError: If there's an issue parsing the data.
         """
         try:
-            tree = self._fetch_page()
-            if "error" in tree:
-                return tree
+            tree: html.HtmlElement = self._fetch_page()
 
-            source, title, posttime = [], [], []
+            links: List[html.HtmlElement] = tree.xpath("//a[contains(@class, 'LatestNews')]")
+            latest_news_elements: List[html.HtmlElement] = tree.xpath("//ul[contains(@class, 'LatestNews')]")
 
-            links = tree.xpath("//a[contains(@class, 'LatestNews')]")
-            if not links:
-                return {"error": "No Latest News links found"}
+            parsed_news: List[Dict[str, Optional[str]]] = []
 
-            latest_news = tree.xpath("//ul[contains(@class, 'LatestNews')]")
-            if not latest_news:
-                return {"error": "No Latest News list found"}
+            if not links or not latest_news_elements:
+                logger.warning("No Latest News links or list found.")
+                return parsed_news
 
-            for i in links:
-                link = list(i.iterlinks())[0][2] if list(i.iterlinks()) else None
-                source.append(link)
+            for i, link_element in enumerate(links):
+                link: Optional[str] = list(link_element.iterlinks())[0][2] if list(link_element.iterlinks()) else None
+                
+                headline = None
+                post_time = None
 
-            for i in latest_news:
-                el = i.xpath("li")
-                for rs in el:
-                    text = rs.xpath(".//a/text()")
-                    posttime_ = rs.xpath(".//span/time/text()")
+                # Safely access elements from latest_news_elements
+                if latest_news_elements and i < len(latest_news_elements[0].xpath("//li")) and latest_news_elements[0].xpath(f"//li[{i+1}]"):
+                    li_element = latest_news_elements[0].xpath(f"//li[{i+1}]")[0]
+                    title_text = li_element.xpath(".//a/text()")
+                    posttime_text = li_element.xpath(".//span/time/text()")
 
-                    title.append(' '.join(text).encode('ascii', 'ignore').decode('ascii'))
-                    posttime.append(' '.join(posttime_))
+                    headline = ' '.join(title_text).encode('ascii', 'ignore').decode('ascii') if title_text else None
+                    post_time = ' '.join(posttime_text) if posttime_text else None
+                
+                parsed_news.append({'headline': headline, 'time': post_time, 'link': link})
 
-            return {
-                'headline': title,
-                'time': posttime,
-                'link': source
-            }
+            return parsed_news
         except Exception as e:
-            return {"error": str(e)}
+            logger.error(f"Error parsing latest news: {e}")
+            raise ParsingError(f"Error parsing latest news: {e}") from e
 
-    def by_category(self, category):
+    def by_category(self, category: str) -> Dict[str, List[Optional[str]]]:
         """
         Fetches news based on the category.
 
         Args:
             category (str): The news category to fetch.
 
-        Returns: dict: Dictionary containing headlines, post times, and links for the specified category, or an error
-        message.
+        Returns: dict: Dictionary containing headlines, post times, and links for the specified category.
+        Raises:
+            DataNotFoundError: If news for the specified category is not found.
+            ParsingError: If there's an issue parsing the data.
         """
         try:
-            tree = self._fetch_page(category)
-            if "error" in tree:
-                return tree
+            tree: html.HtmlElement = self._fetch_page(category)
 
-            headlines, post_times, links = [], [], []
-            news_elements = tree.cssselect('.Card-titleContainer a.Card-title')
-            post_time_elements = tree.cssselect('span.Card-time')
-            for news, post_time in zip(news_elements, post_time_elements):
-                headlines.append(news.text.strip().encode('ascii', 'ignore').decode('ascii'))
-                links.append(news.get('href'))
-                post_times.append(post_time.text.strip())
+            news_elements: List[html.HtmlElement] = tree.cssselect(
+                '.Card-titleContainer a.Card-title')
+            post_time_elements: List[html.HtmlElement] = tree.cssselect(
+                'span.Card-time')
 
-            return {
-                'headline': headlines,
-                'time': post_times,
-                'link': links,
-            }
+            if not news_elements or not post_time_elements:
+                logger.warning(
+                    f"No news elements or post time elements found for category: {category}")
+                return []
+
+            parsed_news: List[Dict[str, Optional[str]]] = []
+            for news_element, post_time_element in zip(news_elements, post_time_elements):
+                headline = news_element.text.strip().encode('ascii', 'ignore').decode('ascii')
+                link = news_element.get('href')
+                post_time = post_time_element.text.strip()
+                parsed_news.append({'headline': headline, 'time': post_time, 'link': link})
+
+            return parsed_news
 
         except Exception as e:
-            return {"error": str(e)}
+            logger.error(f"Error parsing news for category {category}: {e}")
+            raise ParsingError(
+                f"Error parsing news for category {category}: {e}") from e
+
+        except Exception as e:
+            logger.error(f"Error parsing news for category {category}: {e}")
+            raise ParsingError(
+                f"Error parsing news for category {category}: {e}") from e

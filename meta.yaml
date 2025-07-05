@@ -1,5 +1,5 @@
 {% set name = "ycnbc" %}
-{% set version = "1.0.8" %}
+{% set version = "1.0.9" %}
 
 package:
   name: "{{ name|lower }}"
@@ -16,14 +16,14 @@ build:
 
 requirements:
   host:
-    - requests >=2.23.0
+    - curl-cffi >=0.5.9
     - lxml >=4.5.1
     - cssselect >=1.2.0
     - pip
     - python
 
   run:
-    - requests >=2.23.0
+    - curl-cffi >=0.5.9
     - lxml >=4.5.1
     - cssselect >=1.2.0
     - python

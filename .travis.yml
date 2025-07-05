@@ -1,21 +1,15 @@
 language: python
-
-sudo: true
 fast_finish: true
 
 matrix:
   include:
-    - python: 3.5
-    - python: 3.6
-    - python: 3.7
     - python: 3.8
     - python: 3.9
     - python: 3.10
-      dist: xenial
-      sudo: true
+    - python: 3.11
+    - python: 3.12
 
 install:
-  - pip install Cython
   - pip install pytest>=4.6
   - pip install pytest-cov
   - pip install coveralls

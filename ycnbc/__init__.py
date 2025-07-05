@@ -18,6 +18,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+import logging
 
 from . import version
 from .news import News
@@ -26,5 +27,8 @@ from .markets import Markets
 __version__ = version.version
 __author__ = "Asep Saputra"
 
+# Configure basic logging for the library
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-__all__ = [News, Markets]
+__all__ = ['News', 'Markets']
